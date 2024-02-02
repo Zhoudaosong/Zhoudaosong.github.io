@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>最大似然估计</title>
-    <url>/2024/02/01/%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/</url>
+    <url>/Zhoudaosong/Zhoudaosong.github.io/2024/02/01/%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/</url>
     <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/Zhoudaosong/picgotuchuang/img/image-20240201211610074.png" alt="最大似然估计概念图"></p>
 <p>最大似然估计做的是什么事情？</p>
 <p>就是找到一组参数的估计，使得在这组参数的情况下，我们的观测（测量）数据出现的概率最大。</p>
@@ -45,7 +45,7 @@
   </entry>
   <entry>
     <title>构建dockerfile文件在centos镜像内安装vim命令报错的解决</title>
-    <url>/2024/02/01/%E7%8B%82%E7%A5%9E%EF%BC%9A28%E6%9E%84%E5%BB%BAdockerfile%E5%9C%A8centos%E9%95%9C%E5%83%8F%E5%86%85%E5%AE%89%E8%A3%85vim%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%E7%9A%84%E8%A7%A3%E5%86%B3/</url>
+    <url>/Zhoudaosong/Zhoudaosong.github.io/2024/02/01/%E7%8B%82%E7%A5%9E%EF%BC%9A28%E6%9E%84%E5%BB%BAdockerfile%E5%9C%A8centos%E9%95%9C%E5%83%8F%E5%86%85%E5%AE%89%E8%A3%85vim%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%E7%9A%84%E8%A7%A3%E5%86%B3/</url>
     <content><![CDATA[<p>编写dockerfile文件的目的：创建适合自己的需求的镜像文件（定制化需求）。例如下载得到的官方默认的centos是没有vim命令的（如下图所示），不便于使用，因此我们需要根据自己的需求在官方的centos的基础上安装vim。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/Zhoudaosong/picgotuchuang/img/image-20240201211010578.png" alt="默认的centos是没有vim命令的"></p>
 <center>图一</center>
