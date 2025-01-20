@@ -1,31 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>基于Hexo的hexo-theme-matery主题搭建博客并优化</title>
-    <url>/2025/01/20/My-First-Post/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>杂</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Blog</tag>
-        <tag>GitHub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo博客try</title>
-    <url>/2025/01/20/hexo%E5%8D%9A%E5%AE%A2try/</url>
-    <content><![CDATA[<h1 id="这是hexo博客的一次尝试"><a href="#这是hexo博客的一次尝试" class="headerlink" title="这是hexo博客的一次尝试"></a>这是hexo博客的一次尝试</h1><h2 id="标题2"><a href="#标题2" class="headerlink" title="标题2"></a>标题2</h2><h3 id="标题3"><a href="#标题3" class="headerlink" title="标题3"></a>标题3</h3>]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>图优化g2o</title>
     <url>/2025/01/20/%E5%9B%BE%E4%BC%98%E5%8C%96g2o/</url>
     <content><![CDATA[<h2 id="图优化和基于滤波算法的对比"><a href="#图优化和基于滤波算法的对比" class="headerlink" title="图优化和基于滤波算法的对比"></a>图优化和基于滤波算法的对比</h2><p>早期滤波算法占据主流地位，因为滤波算法在计算资源受限、待估计量比较简单的时候有优势，其缺点是存储量和状态量是平方增长关系，不适合大型场景。</p>
@@ -37,7 +12,7 @@
 <li><p>&#x3D;&#x3D;优化图&#x3D;&#x3D;。调整机器人的位姿（顶点）来尽量满足边的约束，使得误差最小。</p>
 </li>
 </ul>
-<p><img src="/home/soren/snap/typora/90/.config/Typora/typora-user-images/image-20240807011337164.png" alt="image-20240807011337164"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Zhoudaosong/Images@main/image-20240807011337164.png" alt="image-20240807011337164"></p>
 <h4 id="对这张图的解读"><a href="#对这张图的解读" class="headerlink" title="对这张图的解读"></a>对这张图的解读</h4><p>核心是SparseOptimizer。&#x3D;&#x3D;向上&#x3D;&#x3D;：根据继承关系，它首先是优化图类，其次是超图类，超图是最底层的基类，该积累中包含多个点和边，即点和边是超图的成员（四有继承或者包含）；向下：SparseOptimizer有一个优化算法，优化算法有三种（GN、LM和Dogleg），每一种算法都有一个求解器，该求解器是一个块求解器，块求解器包含一个线性器。</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> g2o::BlockSolver&lt; g2o::BlockSolverTraits&lt;<span class="number">3</span>,<span class="number">1</span>&gt; &gt; Block;  <span class="comment">// 每个误差项优化变量维度为3，误差值维度为1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第1步：创建一个线性求解器LinearSolver</span></span><br><span class="line">Block::LinearSolverType* linearSolver = <span class="keyword">new</span> g2o::<span class="built_in">LinearSolverDense</span>&lt;Block::PoseMatrixType&gt;(); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 第2步：创建BlockSolver。并用上面定义的线性求解器初始化</span></span><br><span class="line">Block* solver_ptr = <span class="keyword">new</span> <span class="built_in">Block</span>( linearSolver );      </span><br><span class="line"></span><br><span class="line"><span class="comment">// 第3步：创建总求解器solver。并从GN, LM, DogLeg 中选一个，再用上述块求解器BlockSolver初始化</span></span><br><span class="line">g2o::OptimizationAlgorithmLevenberg* solver = <span class="keyword">new</span> g2o::<span class="built_in">OptimizationAlgorithmLevenberg</span>( solver_ptr );</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第4步：创建终极大boss 稀疏优化器（SparseOptimizer）</span></span><br><span class="line">g2o::SparseOptimizer optimizer;     <span class="comment">// 图模型</span></span><br><span class="line">optimizer.<span class="built_in">setAlgorithm</span>( solver );   <span class="comment">// 设置求解器</span></span><br><span class="line">optimizer.<span class="built_in">setVerbose</span>( <span class="literal">true</span> );       <span class="comment">// 打开调试输出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第5步：定义图的顶点和边。并添加到SparseOptimizer中</span></span><br><span class="line">CurveFittingVertex* v = <span class="keyword">new</span> <span class="built_in">CurveFittingVertex</span>(); <span class="comment">//往图中增加顶点</span></span><br><span class="line">v-&gt;<span class="built_in">setEstimate</span>( Eigen::<span class="built_in">Vector3d</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>) );</span><br><span class="line">v-&gt;<span class="built_in">setId</span>(<span class="number">0</span>);</span><br><span class="line">optimizer.<span class="built_in">addVertex</span>( v );</span><br><span class="line"><span class="keyword">for</span> ( <span class="type">int</span> i=<span class="number">0</span>; i&lt;N; i++ )    <span class="comment">// 往图中增加边</span></span><br><span class="line">&#123;</span><br><span class="line">  CurveFittingEdge* edge = <span class="keyword">new</span> <span class="built_in">CurveFittingEdge</span>( x_data[i] );</span><br><span class="line">  edge-&gt;<span class="built_in">setId</span>(i);</span><br><span class="line">  edge-&gt;<span class="built_in">setVertex</span>( <span class="number">0</span>, v );                <span class="comment">// 设置连接的顶点</span></span><br><span class="line">  edge-&gt;<span class="built_in">setMeasurement</span>( y_data[i] );      <span class="comment">// 观测数值</span></span><br><span class="line">  edge-&gt;<span class="built_in">setInformation</span>( Eigen::Matrix&lt;<span class="type">double</span>,<span class="number">1</span>,<span class="number">1</span>&gt;::<span class="built_in">Identity</span>()*<span class="number">1</span>/(w_sigma*w_sigma) ); <span class="comment">// 信息矩阵：协方差矩阵之逆</span></span><br><span class="line">  optimizer.<span class="built_in">addEdge</span>( edge );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第6步：设置优化参数，开始执行优化</span></span><br><span class="line">optimizer.<span class="built_in">initializeOptimization</span>();</span><br><span class="line">optimizer.<span class="built_in">optimize</span>(<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
 
@@ -66,7 +41,7 @@
     <url>/2025/01/20/%E8%A7%86%E8%A7%89SLAM%E6%8A%80%E6%9C%AF%E7%BB%BC%E8%BF%B0/</url>
     <content><![CDATA[<p><a href="https://mp.weixin.qq.com/s?__biz=MzIxOTczOTM4NA==&mid=2247486745&idx=1&sn=354b1a38b48fa900c35928ebae765d46&chksm=97d7e88ea0a06198f9e6694abb907a4ad283895100ea5b25e093224d4312464c4e212589d925&token=1221160726&lang=zh_CN&scene=21#wechat_redirect">视觉SLAM技术综述</a></p>
 <p>假设机器人携带传感器 (相机) 在未知环境中运动，为方便起见，把一段连续时间的运动变成离散时刻 t&#x3D;1，…k，而在这些时刻，用 x 表示机器人的自身位置，则各时刻的位置就记为 <em>x**1</em>，<em>x**2</em>…<em>x**k</em>，它构成了机器人的轨迹。地图方面，假设地图由许多个路标组成，而每个时刻，传感器会测量到一部分路标点，得到它们的观测数据。设路标点共有 N 个，用 <em>y**1</em>，<em>y**2</em>…<em>y**n</em> 表示。通过运动测量 u 和传感器读数 z 来求解定位问题 (估计 x)和建图问题 (估计 y)。</p>
-<p><img src="/home/soren/snap/typora/90/.config/Typora/typora-user-images/image-20240806120508947.png" alt="image-20240806120508947"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Zhoudaosong/Images@main/image-20240806120508947.png" alt="image-20240806120508947"></p>
 <p>相机具有视觉信息丰富、硬件成本低等优点，经典的vSLAM系统一般包含前端视觉里程计、 后端优化、 闭环检测和构图四个主要部分</p>
 ]]></content>
       <categories>

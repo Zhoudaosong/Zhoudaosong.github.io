@@ -492,7 +492,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
-                    2025-01-20
+                    2025-01-21
                 </div>
                 
 
@@ -538,7 +538,7 @@
 <li><p>&#x3D;&#x3D;优化图&#x3D;&#x3D;。调整机器人的位姿（顶点）来尽量满足边的约束，使得误差最小。</p>
 </li>
 </ul>
-<p><img src="/home/soren/snap/typora/90/.config/Typora/typora-user-images/image-20240807011337164.png" alt="image-20240807011337164"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Zhoudaosong/Images@main/image-20240807011337164.png" alt="image-20240807011337164"></p>
 <h4 id="对这张图的解读"><a href="#对这张图的解读" class="headerlink" title="对这张图的解读"></a>对这张图的解读</h4><p>核心是SparseOptimizer。&#x3D;&#x3D;向上&#x3D;&#x3D;：根据继承关系，它首先是优化图类，其次是超图类，超图是最底层的基类，该积累中包含多个点和边，即点和边是超图的成员（四有继承或者包含）；向下：SparseOptimizer有一个优化算法，优化算法有三种（GN、LM和Dogleg），每一种算法都有一个求解器，该求解器是一个块求解器，块求解器包含一个线性器。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> g2o::BlockSolver&lt; g2o::BlockSolverTraits&lt;<span class="number">3</span>,<span class="number">1</span>&gt; &gt; Block;  <span class="comment">// 每个误差项优化变量维度为3，误差值维度为1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第1步：创建一个线性求解器LinearSolver</span></span><br><span class="line">Block::LinearSolverType* linearSolver = <span class="keyword">new</span> g2o::<span class="built_in">LinearSolverDense</span>&lt;Block::PoseMatrixType&gt;(); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 第2步：创建BlockSolver。并用上面定义的线性求解器初始化</span></span><br><span class="line">Block* solver_ptr = <span class="keyword">new</span> <span class="built_in">Block</span>( linearSolver );      </span><br><span class="line"></span><br><span class="line"><span class="comment">// 第3步：创建总求解器solver。并从GN, LM, DogLeg 中选一个，再用上述块求解器BlockSolver初始化</span></span><br><span class="line">g2o::OptimizationAlgorithmLevenberg* solver = <span class="keyword">new</span> g2o::<span class="built_in">OptimizationAlgorithmLevenberg</span>( solver_ptr );</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第4步：创建终极大boss 稀疏优化器（SparseOptimizer）</span></span><br><span class="line">g2o::SparseOptimizer optimizer;     <span class="comment">// 图模型</span></span><br><span class="line">optimizer.<span class="built_in">setAlgorithm</span>( solver );   <span class="comment">// 设置求解器</span></span><br><span class="line">optimizer.<span class="built_in">setVerbose</span>( <span class="literal">true</span> );       <span class="comment">// 打开调试输出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第5步：定义图的顶点和边。并添加到SparseOptimizer中</span></span><br><span class="line">CurveFittingVertex* v = <span class="keyword">new</span> <span class="built_in">CurveFittingVertex</span>(); <span class="comment">//往图中增加顶点</span></span><br><span class="line">v-&gt;<span class="built_in">setEstimate</span>( Eigen::<span class="built_in">Vector3d</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>) );</span><br><span class="line">v-&gt;<span class="built_in">setId</span>(<span class="number">0</span>);</span><br><span class="line">optimizer.<span class="built_in">addVertex</span>( v );</span><br><span class="line"><span class="keyword">for</span> ( <span class="type">int</span> i=<span class="number">0</span>; i&lt;N; i++ )    <span class="comment">// 往图中增加边</span></span><br><span class="line">&#123;</span><br><span class="line">  CurveFittingEdge* edge = <span class="keyword">new</span> <span class="built_in">CurveFittingEdge</span>( x_data[i] );</span><br><span class="line">  edge-&gt;<span class="built_in">setId</span>(i);</span><br><span class="line">  edge-&gt;<span class="built_in">setVertex</span>( <span class="number">0</span>, v );                <span class="comment">// 设置连接的顶点</span></span><br><span class="line">  edge-&gt;<span class="built_in">setMeasurement</span>( y_data[i] );      <span class="comment">// 观测数值</span></span><br><span class="line">  edge-&gt;<span class="built_in">setInformation</span>( Eigen::Matrix&lt;<span class="type">double</span>,<span class="number">1</span>,<span class="number">1</span>&gt;::<span class="built_in">Identity</span>()*<span class="number">1</span>/(w_sigma*w_sigma) ); <span class="comment">// 信息矩阵：协方差矩阵之逆</span></span><br><span class="line">  optimizer.<span class="built_in">addEdge</span>( edge );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第6步：设置优化参数，开始执行优化</span></span><br><span class="line">optimizer.<span class="built_in">initializeOptimization</span>();</span><br><span class="line">optimizer.<span class="built_in">optimize</span>(<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
 
@@ -707,49 +707,59 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/2025/01/20/hexo%E5%8D%9A%E5%AE%A2try/">
+                <a href="/2025/01/20/%E5%9B%BE%E4%BC%98%E5%8C%96g2o/">
                     <div class="card-image">
                         
-                        <img src="/medias/cover/hexo.jpg" class="responsive-img" alt="hexo博客try">
+                        <img src="/medias/cover/hexo.jpg" class="responsive-img" alt="图优化g2o">
                         
-                        <span class="card-title">hexo博客try</span>
+                        <span class="card-title">图优化g2o</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            这是hexo博客的一次尝试。
+                            关于g2o的基础知识和使用方法。
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2025-01-20
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-01-20
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Hexo/" class="post-category">
-                                    Hexo
+                            <a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">
+                                    技术
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Hexo/">
-                        <span class="chip bg-color">Hexo</span>
+                    <a href="/tags/SLAM/">
+                        <span class="chip bg-color">SLAM</span>
                     </a>
                     
-                    <a href="/tags/Blog/">
-                        <span class="chip bg-color">Blog</span>
+                    <a href="/tags/%E5%9B%BE%E4%BC%98%E5%8C%96/">
+                        <span class="chip bg-color">图优化</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95/">
+                        <span class="chip bg-color">滤波算法</span>
+                    </a>
+                    
+                    <a href="/tags/g2o/">
+                        <span class="chip bg-color">g2o</span>
                     </a>
                     
                 </div>
@@ -978,7 +988,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;Total Words:&nbsp;<span
-                        class="white-color">1k</span>
+                        class="white-color">990</span>
             
             
             
