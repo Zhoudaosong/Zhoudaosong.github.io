@@ -5,7 +5,7 @@
     <url>/2025/01/20/My-First-Post/</url>
     <content><![CDATA[]]></content>
       <categories>
-        <category>Hexo</category>
+        <category>杂</category>
       </categories>
       <tags>
         <tag>Hexo</tag>
@@ -53,7 +53,7 @@
 <p>也就是&#x3D;&#x3D;在图中从下网上&#x3D;&#x3D;依次添加。</p>
 ]]></content>
       <categories>
-        <category>Hexo</category>
+        <category>技术</category>
       </categories>
       <tags>
         <tag>SLAM</tag>
@@ -70,7 +70,7 @@
 <p>相机具有视觉信息丰富、硬件成本低等优点，经典的vSLAM系统一般包含前端视觉里程计、 后端优化、 闭环检测和构图四个主要部分</p>
 ]]></content>
       <categories>
-        <category>Hexo</category>
+        <category>技术</category>
       </categories>
       <tags>
         <tag>视觉SLAM</tag>
