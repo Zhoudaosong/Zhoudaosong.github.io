@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>hexo博客try</title>
-    <url>/2025/01/20/hexo%E5%8D%9A%E5%AE%A2try/</url>
-    <content><![CDATA[<h1 id="这是hexo博客的一次尝试"><a href="#这是hexo博客的一次尝试" class="headerlink" title="这是hexo博客的一次尝试"></a>这是hexo博客的一次尝试</h1><h2 id="标题2"><a href="#标题2" class="headerlink" title="标题2"></a>标题2</h2><h3 id="标题3"><a href="#标题3" class="headerlink" title="标题3"></a>标题3</h3>]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基于Hexo的hexo-theme-matery主题搭建博客并优化</title>
     <url>/2025/01/20/My-First-Post/</url>
     <content><![CDATA[]]></content>
@@ -23,6 +11,18 @@
         <tag>Hexo</tag>
         <tag>Blog</tag>
         <tag>GitHub</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo博客try</title>
+    <url>/2025/01/20/hexo%E5%8D%9A%E5%AE%A2try/</url>
+    <content><![CDATA[<h1 id="这是hexo博客的一次尝试"><a href="#这是hexo博客的一次尝试" class="headerlink" title="这是hexo博客的一次尝试"></a>这是hexo博客的一次尝试</h1><h2 id="标题2"><a href="#标题2" class="headerlink" title="标题2"></a>标题2</h2><h3 id="标题3"><a href="#标题3" class="headerlink" title="标题3"></a>标题3</h3>]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>
