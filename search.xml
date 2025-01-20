@@ -56,9 +56,9 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
-        <tag>Blog</tag>
-        <tag>GitHub</tag>
+        <tag>SLAM</tag>
+        <tag>图优化</tag>
+        <tag>滤波算法</tag>
       </tags>
   </entry>
   <entry>
@@ -73,9 +73,7 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
-        <tag>Blog</tag>
-        <tag>GitHub</tag>
+        <tag>视觉SLAM</tag>
       </tags>
   </entry>
 </search>
